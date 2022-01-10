@@ -39,18 +39,34 @@ const initApp = () => {
 //Day 1 part 1
 const day01 = async (input: string) => {
   //turn the input into an array of numbers, then count the number of times a number is greater than its predecessor, excluding the very first number
-  const numbers = input.split("\n").map(Number);
-  let count: number = 0;
-  for (let i = 1; i < numbers.length; i++) {
-    let last = numbers[i - 1] ?? numbers[i];
+  const depths: number[] = input.split("\n").map(Number);
+  return countIncreases(depths);
+};
+
+const countIncreases = (numbers: number[]) => {
+  let increases: number = 0;
+  for (let i: number = 1; i < numbers.length; i++) {
+    let last: number = numbers[i - 1] ?? numbers[i];
     if (numbers[i] > last) {
-      count++;
+      increases++;
     }
   }
-  return count;
+  return increases;
 };
+
+//Day 2 part 2
+//Same as day 1 except instead of comparing individual depths, compare sums of 3-measurement arrays
+const day01part2 = async (input: string) => {
+  const depths: number[] = input.split("\n").map(Number);
+  const depthWindows = [];
+  for (let i = 0; i < depths.length; i++) {
+    depthWindows.push(depths[i] + (depths[i + 1] ?? 0) + (depths[i + 2] ?? 0));
+  }
+  return countIncreases(depthWindows);
+}
 
 const solutions = {
   "day01": day01
+  ,"day01part2": day01part2
 };
 type SolutionsKey = keyof typeof solutions;

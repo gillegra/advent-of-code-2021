@@ -8,31 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const day01 = (input) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    //turn the input into an array of numbers, then count the number of times a number is greater than its predecessor, excluding the very first number
-    const numbers = input.split("\n").map(Number);
-    let count = 0;
-    for (let i = 1; i < numbers.length; i++) {
-        let last = (_a = numbers[i - 1]) !== null && _a !== void 0 ? _a : numbers[i];
-        if (numbers[i] > last) {
-            count++;
-        }
-    }
-    return count;
-});
-const solutions = {
-    "day01": day01
-};
-const processFormSubmissions = (form) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b, _c;
+const processFormSubmissions = (form, submitter) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     //get the input from the form and run it through the appropriate solution according to the left 5 characters from the form's id property
-    // const day: string = form.id.substring(0, 5);
     const day = form.id.substring(0, 5);
-    const input = (_c = (_b = form.querySelector(`#${day}Input`)) === null || _b === void 0 ? void 0 : _b.value) !== null && _c !== void 0 ? _c : "";
-    const solution = solutions[day];
+    const input = (_b = (_a = form.querySelector(`#${day}Input`)) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : "";
+    const solution = solutions[(day + (submitter.id === day + "button" ? "" : "part2"))];
     const output = yield solution(input);
-    form.querySelector(`#${day}Output`).textContent += output;
+    form.querySelector(`#${day}Output`).textContent = output;
 });
 //launch the app
 document.addEventListener("readystatechange", (event) => {
@@ -48,10 +31,43 @@ const initApp = () => {
         //submit button runs associated day's solution
         form.addEventListener("submit", (event) => {
             event.preventDefault();
-            processFormSubmissions(event.target);
+            processFormSubmissions(event.target, event.submitter);
         });
         //contents of each form's textarea are populated with it's own placeholder property value
         const textarea = form.querySelector("textarea");
         textarea.value = textarea.placeholder;
     }
+};
+//SOLUTIONS
+//Day 1 part 1
+const day01 = (input) => __awaiter(void 0, void 0, void 0, function* () {
+    //turn the input into an array of numbers, then count the number of times a number is greater than its predecessor, excluding the very first number
+    const depths = input.split("\n").map(Number);
+    return countIncreases(depths);
+});
+const countIncreases = (numbers) => {
+    var _a;
+    let increases = 0;
+    for (let i = 1; i < numbers.length; i++) {
+        let last = (_a = numbers[i - 1]) !== null && _a !== void 0 ? _a : numbers[i];
+        if (numbers[i] > last) {
+            increases++;
+        }
+    }
+    return increases;
+};
+//Day 2 part 2
+//Same as day 1 except instead of comparing individual depths, compare sums of 3-measurement arrays
+const day01part2 = (input) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
+    const depths = input.split("\n").map(Number);
+    const depthWindows = [];
+    for (let i = 0; i < depths.length; i++) {
+        depthWindows.push(depths[i] + ((_c = depths[i + 1]) !== null && _c !== void 0 ? _c : 0) + ((_d = depths[i + 2]) !== null && _d !== void 0 ? _d : 0));
+    }
+    return countIncreases(depthWindows);
+});
+const solutions = {
+    "day01": day01,
+    "day01part2": day01part2
 };
