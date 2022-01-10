@@ -18,12 +18,15 @@
       <span class="dayLink" id="day01Link"><a href="https://adventofcode.com/2021/day/1" target="_blank">link</a></span>
       <form id="day01Form">
         <label for="day01Input">Input:</label>
-        <!-- textbox for multi-line input -->
-        <input
-          type="text"
+        <!-- textbox for multi-line input that highlights the current contents when focused, with the default values already filled in -->
+        <textarea
           id="day01Input"
-          value="199,200,208,210,200,207,240,269,260,263"
-        />
+          name="day01Input"
+          rows="10"
+          cols="5"
+          onFocus="this.setSelectionRange(0, this.value.length)"
+          placeholder="199&#10;200&#10;208&#10;210&#10;200&#10;207&#10;240&#10;269&#10;260&#10;263"
+        ></textarea>
         <button id="day01button">Process</button>
         <span class="result" id="day01Output">Result: </span>
       </form>

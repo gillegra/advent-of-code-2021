@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const day01 = (input) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     //turn the input into an array of numbers, then count the number of times a number is greater than its predecessor, excluding the very first number
-    const numbers = input.split(",").map(Number);
+    const numbers = input.split("\n").map(Number);
     let count = 0;
     for (let i = 1; i < numbers.length; i++) {
         let last = (_a = numbers[i - 1]) !== null && _a !== void 0 ? _a : numbers[i];
@@ -27,6 +27,7 @@ const solutions = {
 const processFormSubmissions = (form) => __awaiter(void 0, void 0, void 0, function* () {
     var _b, _c;
     //get the input from the form and run it through the appropriate solution according to the left 5 characters from the form's id property
+    // const day: string = form.id.substring(0, 5);
     const day = form.id.substring(0, 5);
     const input = (_c = (_b = form.querySelector(`#${day}Input`)) === null || _b === void 0 ? void 0 : _b.value) !== null && _c !== void 0 ? _c : "";
     const solution = solutions[day];
@@ -35,18 +36,22 @@ const processFormSubmissions = (form) => __awaiter(void 0, void 0, void 0, funct
 });
 //launch the app
 document.addEventListener("readystatechange", (event) => {
-    if (event.target.readyState === "complete") {
+    if (document.readyState === "complete") {
         initApp();
     }
 });
 const initApp = () => {
-    //add listeners to each form
+    //prep each form with listeners and default values
     const forms = document.querySelectorAll("form");
     for (let i = 0; i < forms.length; i++) {
         const form = forms[i];
+        //submit button runs associated day's solution
         form.addEventListener("submit", (event) => {
             event.preventDefault();
             processFormSubmissions(event.target);
         });
+        //contents of each form's textarea are populated with it's own placeholder property value
+        const textarea = form.querySelector("textarea");
+        textarea.value = textarea.placeholder;
     }
 };

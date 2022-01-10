@@ -1,6 +1,6 @@
 const day01 = async (input: string): Promise<number> => {
   //turn the input into an array of numbers, then count the number of times a number is greater than its predecessor, excluding the very first number
-  const numbers: number[] = input.split(",").map(Number);
+  const numbers: number[] = input.split("\n").map(Number);
   let count: number = 0;
   for (let i: number = 1; i < numbers.length; i++) {
     let last: number = numbers[i - 1] ?? numbers[i];
@@ -34,14 +34,21 @@ document.addEventListener("readystatechange", (event: Event) => {
 });
 
 const initApp = () => {
-  //add listeners to each form
+  //prep each form with listeners and default values
   const forms: NodeListOf<HTMLFormElement> = document.querySelectorAll("form");
   for (let i: number = 0; i < forms.length; i++) {
     const form: HTMLFormElement = forms[i];
+
+    //submit button runs associated day's solution
     form.addEventListener("submit", (event: SubmitEvent) => {
       event.preventDefault();
       processFormSubmissions(event.target as HTMLFormElement);
     });
+
+    //contents of each form's textarea are populated with it's own placeholder property value
+    const textarea: HTMLTextAreaElement = form.querySelector("textarea") as HTMLTextAreaElement;
+    textarea.value = textarea.placeholder;
+
   }
 };
 
