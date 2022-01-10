@@ -1,10 +1,10 @@
-const processFormSubmissions = async (form: HTMLFormElement) => {
+const processFormSubmissions = async (form: HTMLFormElement, submitter: HTMLButtonElement) => {
   //get the input from the form and run it through the appropriate solution according to the left 5 characters from the form's id property
-  const day: SolutionsKey = form.id.substring(0, 5) as SolutionsKey;
-  const input: string = (form.querySelector(`#${day}Input`) as HTMLInputElement)?.value ?? "";
-  const solution: Function = solutions[day];
+  const day = form.id.substring(0, 5);
+  const input = (form.querySelector(`#${day}Input`) as HTMLInputElement)?.value ?? "";
+  const solution: Function = solutions[(day + (submitter.id === day + "button" ? "" : "part2")) as SolutionsKey];
   const output: string = await solution(input);
-  (form.querySelector(`#${day}Output`) as HTMLElement).textContent += output;
+  (form.querySelector(`#${day}Output`) as HTMLElement).textContent = output;
 };
 
 //launch the app
@@ -23,7 +23,7 @@ const initApp = () => {
     //submit button runs associated day's solution
     form.addEventListener("submit", (event: SubmitEvent) => {
       event.preventDefault();
-      processFormSubmissions(event.target as HTMLFormElement);
+      processFormSubmissions(event.target as HTMLFormElement, event.submitter as HTMLButtonElement);
     });
 
     //contents of each form's textarea are populated with it's own placeholder property value
